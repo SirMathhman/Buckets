@@ -1,27 +1,36 @@
 package com.meti.bucket;
 
-import com.meti.Parameterized;
+import com.meti.predicate.ParameterizedPredicate;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-/**
- * @author SirMathhman
- * @version 0.0.0
- * @since 1/8/2019
- */
-public class BucketSearcher<P> {
-    private final Parameterized<P> parameters;
+public class BucketSearcher<T, B extends Bucket<T, ?>> {
+    private final Map<Collection<?>, B> bucketMap = new HashMap<>();
 
-    public BucketSearcher(Parameterized<P> parameters) {
-        this.parameters = parameters;
+    public void index(BucketManager<T, B> bucketManager) {
+        for (B bucket : bucketManager.buckets()) {
+            if (bucket instanceof PredicateBucket) {
+                Predicate filter = ((PredicateBucket) bucket).filter;
+                if (filter instanceof ParameterizedPredicate) {
+                    ParameterizedPredicate parameterizedPredicate = (ParameterizedPredicate) filter;
+                    bucketMap.put(parameterizedPredicate.getParameters(), bucket);
+                }
+            }
+        }
     }
 
-    public void search(BucketManager<?, ? extends Bucket<?, ?>> manager){
-        manager.buckets().stream().filter(new Predicate<Bucket<?, ?>>() {
-            @Override
-            public boolean test(Bucket<?, ?> bucket) {
-
-            }
-        })
+    public Set<B> search(Stream<?> objects) {
+        Set<?> objectSet = objects.collect(Collectors.toSet());
+        return bucketMap.keySet()
+                .stream()
+                .filter(collection -> collection.containsAll(objectSet))
+                .map(bucketMap::get)
+                .collect(Collectors.toSet());
     }
 }

@@ -16,6 +16,14 @@ public abstract class PredicateBucket<T, C extends Collection<T>> extends Abstra
         this.filter = filter;
     }
 
+    public void check(){
+        for (T type : getCollection()) {
+            if(!filter.test(type)){
+                throw new IllegalStateException("Filter " + filter + " cannot be applied to " + type);
+            }
+        }
+    }
+
     @Override
     public boolean canUse(T element) {
         return filter.test(element);
