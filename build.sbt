@@ -1,5 +1,3 @@
 name := "Buckets"
-
-version := "0.1"
-
-scalaVersion := "2.12.8"
+organization := "com.meti"
+version := "1.0"
