@@ -5,7 +5,7 @@ package com.meti.predicate;
  * @version 0.0.0
  * @since 1/8/2019
  */
-public class TypePredicate<T> extends ParameterizedPredicate<Class<T>, Class<T>> {
+public class TypePredicate<T> extends ParameterizedPredicate<Class<T>, Class<?>> {
     private final boolean subClass;
 
     public TypePredicate(Class<T> testClass, boolean useSubClass) {
@@ -14,12 +14,12 @@ public class TypePredicate<T> extends ParameterizedPredicate<Class<T>, Class<T>>
     }
 
     @Override
-    public boolean test(Class<T> aClass) {
+    public boolean test(Class<?> aClass) {
         if (subClass) {
-            return aClass.isAssignableFrom(parameters.get(0));
+            return parameters.get(0).isAssignableFrom(aClass);
         }
         else{
-            return aClass.equals(parameters.get(0));
+            return parameters.get(0).equals(aClass);
         }
     }
 }

@@ -11,7 +11,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BucketSearcher<T, B extends Bucket<T, ?>> {
-    private final Map<Collection<?>, B> bucketMap = new HashMap<>();
+    public final Map<Collection<?>, B> bucketMap = new HashMap<>();
+
+    public BucketSearcher() {
+    }
+
+    public BucketSearcher(BucketManager<T, B> manager){
+        index(manager);
+    }
 
     public void index(BucketManager<T, B> bucketManager) {
         for (B bucket : bucketManager.buckets()) {
@@ -32,5 +39,9 @@ public class BucketSearcher<T, B extends Bucket<T, ?>> {
                 .filter(collection -> collection.containsAll(objectSet))
                 .map(bucketMap::get)
                 .collect(Collectors.toSet());
+    }
+
+    public void clear(){
+        bucketMap.clear();
     }
 }

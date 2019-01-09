@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author SirMathhman
@@ -20,12 +22,8 @@ public abstract class ParameterizedPredicate<P, T> implements Parameterized<P>, 
         this.parameters.add(parameter);
     }
 
-    public ParameterizedPredicate(P[] parameters) {
-        this(Arrays.asList(parameters));
-    }
-
-    public ParameterizedPredicate(Collection<P> parameters) {
-        this.parameters.addAll(parameters);
+    public ParameterizedPredicate(Stream<P> parameters) {
+        this.parameters.addAll(parameters.collect(Collectors.toSet()));
     }
 
     @Override

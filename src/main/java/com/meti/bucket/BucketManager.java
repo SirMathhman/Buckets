@@ -29,6 +29,10 @@ public class BucketManager<T, B extends Bucket<T, ?>> {
         this.buckets = bucketStream.collect(Collectors.toSet());
     }
 
+    public BucketManager(Function<T, B> bucketAllocator) {
+        this(bucketAllocator, Stream.empty());
+    }
+
     public Map<B, Stream<T>> compoundStream() {
         Map<B, Stream<T>> map = new HashMap<>();
         buckets.forEach(bucket -> map.put(bucket, bucket.getCollection().stream()));
@@ -89,10 +93,10 @@ public class BucketManager<T, B extends Bucket<T, ?>> {
                 .collect(Collectors.toSet());
         if (filledBuckets.isEmpty() && bucketAllocator != null) {
             buckets.add(bucketAllocator.apply(element));
-            add(element);
+            return add(element);
+        } else {
+            return filledBuckets;
         }
-
-        return filledBuckets;
     }
 
     public Set<B> buckets() {
