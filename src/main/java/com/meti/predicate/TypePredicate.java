@@ -5,10 +5,10 @@ package com.meti.predicate;
  * @version 0.0.0
  * @since 1/8/2019
  */
-public class ClassPredicate<T> extends ParameterizedPredicate<Class<T>, Class<T>> {
+public class TypePredicate<T> extends ParameterizedPredicate<Class<T>, Class<T>> {
     private final boolean subClass;
 
-    public ClassPredicate(Class<T> testClass, boolean useSubClass) {
+    public TypePredicate(Class<T> testClass, boolean useSubClass) {
         super(testClass);
         this.subClass = useSubClass;
     }
