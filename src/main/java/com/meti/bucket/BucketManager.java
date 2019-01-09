@@ -94,4 +94,8 @@ public class BucketManager<T, B extends Bucket<T, ?>> {
 
         return filledBuckets;
     }
+
+    public Set<B> buckets() {
+        return buckets;
+    }
 }
