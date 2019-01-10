@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BucketSearcher<T, B extends Bucket<T, ?>> {
+class BucketSearcher<T, B extends Bucket<T, ?>> {
     public final Map<Collection<?>, B> bucketMap = new HashMap<>();
 
     public BucketSearcher() {
@@ -20,7 +20,7 @@ public class BucketSearcher<T, B extends Bucket<T, ?>> {
         index(manager);
     }
 
-    public void index(BucketManager<T, B> bucketManager) {
+    private void index(BucketManager<T, B> bucketManager) {
         for (B bucket : bucketManager.buckets()) {
             if (bucket instanceof PredicateBucket) {
                 Predicate filter = ((PredicateBucket) bucket).filter;

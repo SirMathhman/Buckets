@@ -3,7 +3,6 @@ package com.meti.predicate;
 import com.meti.Parameterized;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
  * @since 1/8/2019
  */
 public abstract class ParameterizedPredicate<P, T> implements Parameterized<P>, Predicate<T> {
-    protected final List<P> parameters = new ArrayList<>();
+    final List<P> parameters = new ArrayList<>();
 
     public ParameterizedPredicate(P parameter) {
         this.parameters.add(parameter);

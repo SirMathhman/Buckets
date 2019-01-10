@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * @version 0.0.0
  * @since 1/8/2019
  */
-public class BucketManager<T, B extends Bucket<T, ?>> {
+class BucketManager<T, B extends Bucket<T, ?>> {
     private final Function<T, B> bucketAllocator;
     private final Set<B> buckets;
 
@@ -24,7 +24,7 @@ public class BucketManager<T, B extends Bucket<T, ?>> {
         this(null, bucketStream);
     }
 
-    public BucketManager(Function<T, B> bucketAllocator, Stream<B> bucketStream) {
+    private BucketManager(Function<T, B> bucketAllocator, Stream<B> bucketStream) {
         this.bucketAllocator = bucketAllocator;
         this.buckets = bucketStream.collect(Collectors.toSet());
     }
