@@ -1,4 +1,4 @@
-package com.meti.bucket;
+package com.meti.test.bucket;
 
 import com.meti.bucket.PredicateBucket;
 import org.junit.jupiter.api.Test;

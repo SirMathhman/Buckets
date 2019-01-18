@@ -1,5 +1,8 @@
-package com.meti.bucket;
+package com.meti.test.bucket;
 
+import com.meti.bucket.BucketManager;
+import com.meti.bucket.PredicateBucket;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -12,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BucketManagerTest {
     @Test
     void test(){
-        assertTrue(new BucketManager<>().buckets().isEmpty());
+        Assertions.assertTrue(new BucketManager<>().buckets().isEmpty());
     }
 
     @Test

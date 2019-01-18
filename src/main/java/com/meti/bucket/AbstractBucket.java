@@ -10,7 +10,7 @@ import java.util.Collection;
 public abstract class AbstractBucket<T, C extends Collection<T>> implements Bucket<T, C> {
     public final C collection;
 
-    AbstractBucket(C collection) {
+    public AbstractBucket(C collection) {
         this.collection = collection;
     }
 

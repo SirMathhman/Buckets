@@ -1,5 +1,6 @@
-package com.meti.predicate;
+package com.meti.test.predicate;
 
+import com.meti.predicate.ParameterizedPredicate;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

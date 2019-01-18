@@ -1,5 +1,8 @@
-package com.meti.bucket;
+package com.meti.test.bucket;
 
+import com.meti.bucket.BucketManager;
+import com.meti.bucket.BucketSearcher;
+import com.meti.bucket.PredicateBucket;
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

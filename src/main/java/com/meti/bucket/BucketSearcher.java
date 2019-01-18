@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class BucketSearcher<T, B extends Bucket<T, ?>> {
+public class BucketSearcher<T, B extends Bucket<T, ?>> {
     public final Map<Collection<?>, B> bucketMap = new HashMap<>();
 
     public BucketSearcher() {

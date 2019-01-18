@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * @version 0.0.0
  * @since 1/8/2019
  */
-class BucketManager<T, B extends Bucket<T, ?>> {
+public class BucketManager<T, B extends Bucket<T, ?>> {
     private final Function<T, B> bucketAllocator;
     private final Set<B> buckets;
 
