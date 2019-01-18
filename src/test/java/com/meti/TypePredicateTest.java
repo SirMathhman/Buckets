@@ -13,25 +13,47 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TypePredicateTest {
     @Test
     void appliesNotEqual(){
-        TypePredicate<Foo> predicate = new TypePredicate<>(Foo.class, false);
-        assertFalse(predicate.test(new Bar()));
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class, false);
+        assertFalse(predicate.test(0));
     }
 
     @Test
     void appliesNotApplicable() {
-        TypePredicate<Foo> predicate = new TypePredicate<>(Foo.class);
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
         assertFalse(predicate.test("test"));
     }
 
     @Test
     void appliesApplicable() {
-        TypePredicate<Foo> predicate = new TypePredicate<>(Foo.class);
-        assertTrue(predicate.test(new Foo()));
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
+        assertTrue(predicate.test(new TestNumber()));
     }
 
     @Test
     void appliesSubclass() {
-        TypePredicate<Foo> predicate = new TypePredicate<>(Foo.class);
-        assertTrue(predicate.test(new Bar()));
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
+        assertTrue(predicate.test(0));
+    }
+
+    private static class TestNumber extends Number {
+        @Override
+        public int intValue() {
+            return 0;
+        }
+
+        @Override
+        public long longValue() {
+            return 0;
+        }
+
+        @Override
+        public float floatValue() {
+            return 0;
+        }
+
+        @Override
+        public double doubleValue() {
+            return 0;
+        }
     }
 }

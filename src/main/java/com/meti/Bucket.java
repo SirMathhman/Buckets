@@ -17,4 +17,10 @@ public class Bucket<T> {
     public boolean canAccept(T test) {
         return objectPredicate.test(test);
     }
+
+    public void checkAccept(T test) {
+        if (!canAccept(test)) {
+            throw new IllegalArgumentException("Cannot accept " + test);
+        }
+    }
 }
