@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.predicate;
 
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;

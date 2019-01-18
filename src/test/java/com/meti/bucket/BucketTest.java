@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.bucket;
 
 import com.meti.bucket.Bucket;
 import com.meti.predicate.TypePredicate;
