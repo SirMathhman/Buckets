@@ -2,7 +2,6 @@ package com.meti.bucket;
 
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +14,31 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1/18/2019
  */
 class BucketTest {
+    @Test
+    void removeValid() {
+        String testValue = "test";
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.elements.add(testValue);
+
+        assertTrue(bucket.remove(testValue));
+    }
+
+    @Test
+    void removeNotPresent() {
+        String testValue = "test";
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        assertFalse(bucket.remove(testValue));
+    }
+
+    @Test
+    void removeInvalid() {
+        List<?> testValue = new ArrayList<>();
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        assertThrows(IllegalArgumentException.class, () -> bucket.remove(testValue));
+    }
+
     @Test
     void addValid() {
         String testValue = "test";

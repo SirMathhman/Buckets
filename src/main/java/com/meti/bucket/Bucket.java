@@ -17,13 +17,15 @@ public class Bucket<T> {
         this.objectPredicate = objectPredicate;
     }
 
-    public boolean canAccept(T test) {
-        return objectPredicate.test(test);
+    public boolean remove(T object) {
+        checkAccept(object);
+
+        return elements.remove(object);
     }
 
-    public void checkAccept(T test) {
-        if (!canAccept(test)) {
-            throw new IllegalArgumentException("Cannot accept " + test);
+    public void checkAccept(T object) {
+        if (!canAccept(object)) {
+            throw new IllegalArgumentException("Cannot accept " + object);
         }
     }
 
@@ -31,5 +33,9 @@ public class Bucket<T> {
         checkAccept(object);
 
         elements.add(object);
+    }
+
+    public boolean canAccept(T object) {
+        return objectPredicate.test(object);
     }
 }
