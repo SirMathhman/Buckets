@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1/18/2019
  */
 class BucketTest {
+    @Test
+    void construct(){
+        Predicate<Object> predicate = new TypePredicate<>(String.class);
+        Bucket<Object> bucket = new Bucket<>(predicate);
+        assertEquals(predicate, bucket.predicate);
+    }
+
     @Test
     void size(){
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));

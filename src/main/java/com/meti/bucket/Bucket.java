@@ -10,11 +10,11 @@ import java.util.function.Predicate;
  * @since 1/18/2019
  */
 public class Bucket<T> {
-    private final Predicate<T> objectPredicate;
+    final Predicate<T> predicate;
     final Set<T> elements = new HashSet<>();
 
-    public Bucket(Predicate<T> objectPredicate) {
-        this.objectPredicate = objectPredicate;
+    public Bucket(Predicate<T> predicate) {
+        this.predicate = predicate;
     }
 
     public void clear() {
@@ -40,7 +40,7 @@ public class Bucket<T> {
     }
 
     public boolean canAccept(T object) {
-        return objectPredicate.test(object);
+        return predicate.test(object);
     }
 
     public int size() {
