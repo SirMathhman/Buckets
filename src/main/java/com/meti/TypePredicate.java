@@ -8,14 +8,24 @@ import java.util.function.Predicate;
  * @since 1/18/2019
  */
 public class TypePredicate<T> implements Predicate<Object> {
-    private Class<T> clazz;
+    private final boolean useSubClass;
+    private final Class<T> clazz;
 
     public TypePredicate(Class<T> clazz) {
+        this(clazz, true);
+    }
+
+    public TypePredicate(Class<T> clazz, boolean useSubClass) {
         this.clazz = clazz;
+        this.useSubClass = useSubClass;
     }
 
     @Override
     public boolean test(Object o) {
-        return clazz.isAssignableFrom(o.getClass());
+        if (useSubClass) {
+            return clazz.isAssignableFrom(o.getClass());
+        } else {
+            return clazz.equals(o.getClass());
+        }
     }
 }
