@@ -1,10 +1,11 @@
 package com.meti.bucket;
 
-import com.meti.bucket.Bucket;
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +15,24 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1/18/2019
  */
 class BucketTest {
+    @Test
+    void addValid() {
+        String testValue = "test";
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.add(testValue);
+        assertTrue(bucket.elements.contains(testValue));
+    }
+
+    @Test
+    void addInvalid() {
+        List<?> testValue = new ArrayList<>();
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        assertThrows(IllegalArgumentException.class, () -> bucket.add(testValue));
+
+        assertFalse(bucket.elements.contains(testValue));
+    }
 
     @Test
     void checkAcceptTrue() {

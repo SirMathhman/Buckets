@@ -1,5 +1,7 @@
 package com.meti.bucket;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -9,6 +11,7 @@ import java.util.function.Predicate;
  */
 public class Bucket<T> {
     private final Predicate<T> objectPredicate;
+    final Set<T> elements = new HashSet<>();
 
     public Bucket(Predicate<T> objectPredicate) {
         this.objectPredicate = objectPredicate;
@@ -22,5 +25,11 @@ public class Bucket<T> {
         if (!canAccept(test)) {
             throw new IllegalArgumentException("Cannot accept " + test);
         }
+    }
+
+    public void add(T object) {
+        checkAccept(object);
+
+        elements.add(object);
     }
 }
