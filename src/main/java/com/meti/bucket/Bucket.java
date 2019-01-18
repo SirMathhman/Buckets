@@ -7,7 +7,7 @@ import java.util.Collection;
  * @version 0.0.0
  * @since 1/8/2019
  */
-public interface Bucket<T, C extends Collection<T>> {
+interface Bucket<T, C extends Collection<T>> {
     boolean canUse(T element);
     C getCollection();
 }
