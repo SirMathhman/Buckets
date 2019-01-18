@@ -1,6 +1,5 @@
-package com.meti.test;
+package com.meti;
 
-import com.meti.TypePredicate;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
