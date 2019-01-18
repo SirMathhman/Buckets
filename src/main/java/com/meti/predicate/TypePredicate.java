@@ -8,8 +8,8 @@ import java.util.function.Predicate;
  * @since 1/18/2019
  */
 public class TypePredicate<T> implements Predicate<Object> {
-    private final boolean useSubClass;
-    private final Class<T> clazz;
+    final boolean useSubClass;
+    final Class<T> clazz;
 
     public TypePredicate(Class<T> clazz) {
         this(clazz, true);

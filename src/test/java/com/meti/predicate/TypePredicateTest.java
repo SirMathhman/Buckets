@@ -3,6 +3,7 @@ package com.meti.predicate;
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,6 +13,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @since 1/18/2019
  */
 class TypePredicateTest {
+    @Test
+    void constructJustClass(){
+        TypePredicate<?> predicate = new TypePredicate<>(Object.class);
+        assertEquals(Object.class, predicate.clazz);
+        assertTrue(predicate.useSubClass);
+    }
+
+    @Test
+    void constructWithUseSubClass(){
+        TypePredicate<?> predicate = new TypePredicate<>(Object.class, true);
+        assertTrue(predicate.useSubClass);
+    }
+
     @Test
     void appliesNotEqual(){
         TypePredicate<Number> predicate = new TypePredicate<>(Number.class, false);
