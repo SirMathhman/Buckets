@@ -4,6 +4,7 @@ import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +15,25 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 1/18/2019
  */
 class BucketTest {
+    @Test
+    void size(){
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.elements.addAll(Arrays.asList("test0", "test1"));
+
+        assertEquals(2, bucket.size());
+    }
+
+    @Test
+    void clear() {
+        String testValue = "test";
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.elements.add(testValue);
+        bucket.clear();
+
+        assertEquals(0, bucket.elements.size());
+    }
+
     @Test
     void removeValid() {
         String testValue = "test";

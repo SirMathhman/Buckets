@@ -17,6 +17,10 @@ public class Bucket<T> {
         this.objectPredicate = objectPredicate;
     }
 
+    public void clear() {
+        elements.clear();
+    }
+
     public boolean remove(T object) {
         checkAccept(object);
 
@@ -37,5 +41,9 @@ public class Bucket<T> {
 
     public boolean canAccept(T object) {
         return objectPredicate.test(object);
+    }
+
+    public int size() {
+        return elements.size();
     }
 }
