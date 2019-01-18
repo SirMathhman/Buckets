@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.bucket;
 
 import java.util.function.Predicate;
 

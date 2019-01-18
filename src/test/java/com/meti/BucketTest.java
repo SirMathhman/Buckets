@@ -1,7 +1,8 @@
 package com.meti;
 
+import com.meti.bucket.Bucket;
+import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 import java.util.ArrayList;
 

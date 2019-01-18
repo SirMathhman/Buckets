@@ -1,4 +1,4 @@
-package com.meti;
+package com.meti.predicate;
 
 import java.util.function.Predicate;
 
