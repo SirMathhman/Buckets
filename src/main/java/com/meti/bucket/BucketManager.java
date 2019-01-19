@@ -2,7 +2,6 @@ package com.meti.bucket;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,7 +19,7 @@ public class BucketManager<T> {
     }
 
     public void add(T test) {
-        Set<Bucket<T>> validBuckets =buckets.stream()
+        Set<Bucket<T>> validBuckets = buckets.stream()
                 .filter(bucket -> bucket.canAccept(test))
                 .collect(Collectors.toSet());
 
