@@ -1,5 +1,9 @@
 package com.meti.bucket;
 
+import com.meti.Parameterized;
+import com.meti.util.CollectionUtil;
+
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -15,6 +19,32 @@ public class Bucket<T> {
 
     public Bucket(Predicate<T> predicate) {
         this.predicate = predicate;
+    }
+
+    public Set<T> getElements() {
+        return Collections.unmodifiableSet(elements);
+    }
+
+    public T toSingle() {
+        return CollectionUtil.toSingle(elements);
+    }
+
+    public boolean containsAll(Object... parameters) {
+        for (Object parameter : parameters) {
+            if (!contains(parameter)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean contains(Object parameter) {
+        Parameterized parameterized = checkParameterized();
+        return parameterized.getParameters().contains(parameter);
+    }
+
+    private Parameterized checkParameterized() {
+        return ((Parameterized) predicate);
     }
 
     public void clear() {

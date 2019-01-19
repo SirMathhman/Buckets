@@ -1,5 +1,9 @@
 package com.meti.predicate;
 
+import com.meti.Parameterized;
+
+import java.util.Collections;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -7,7 +11,7 @@ import java.util.function.Predicate;
  * @version 0.0.0
  * @since 1/18/2019
  */
-public class TypePredicate<T> implements Predicate<Object> {
+public class TypePredicate<T> implements Parameterized<Class<T>>, Predicate<Object> {
     final boolean useSubClass;
     final Class<T> clazz;
 
@@ -27,5 +31,10 @@ public class TypePredicate<T> implements Predicate<Object> {
         } else {
             return clazz.equals(o.getClass());
         }
+    }
+
+    @Override
+    public Set<Class<T>> getParameters() {
+        return Collections.singleton(clazz);
     }
 }

@@ -18,6 +18,18 @@ public class BucketManager<T> {
         this.allocationFunction = allocationFunction;
     }
 
+    public Set<Bucket<T>> byParameters(Object... parameters) {
+        return buckets.stream()
+                .filter(tBucket -> {
+                    try {
+                        return tBucket.containsAll(parameters);
+                    } catch (ClassCastException e) {
+                        return false;
+                    }
+                })
+                .collect(Collectors.toSet());
+    }
+
     public void add(T test) {
         Set<Bucket<T>> validBuckets = buckets.stream()
                 .filter(bucket -> bucket.canAccept(test))
