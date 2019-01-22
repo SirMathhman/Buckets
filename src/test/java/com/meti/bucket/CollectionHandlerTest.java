@@ -17,7 +17,7 @@ class CollectionHandlerTest {
     void handle() {
         ArrayList<Object> objects = new ArrayList<>();
         CollectionHandler<Object, ArrayList<Object>> handler = new CollectionHandler<>(objects);
-        handler.handle("test");
+        handler.accept("test");
 
         assertEquals(1, objects.size());
         assertTrue(objects.contains("test"));
