@@ -73,6 +73,12 @@ public class Bucket<T> {
         elements.add(object);
     }
 
+    public void addAll(T... objects){
+        for (T object : objects) {
+            add(object);
+        }
+    }
+
     public int size() {
         return elements.size();
     }

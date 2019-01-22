@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class BucketTest {
     @Test
-    void construct(){
+    void construct() {
         Predicate<Object> predicate = new TypePredicate<>(String.class);
         Bucket<Object> bucket = new Bucket<>(predicate);
         assertEquals(predicate, bucket.predicate);
     }
 
     @Test
-    void size(){
+    void size() {
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
         bucket.elements.addAll(Arrays.asList("test0", "test1"));
 
@@ -108,5 +109,51 @@ class BucketTest {
     void canAcceptFalse() {
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
         assertFalse(bucket.canAccept(new ArrayList<>()));
+    }
+
+    @Test
+    void getElements() {
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.add("test0");
+    }
+
+    @Test
+    void toSingle() {
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.elements.add("test");
+
+        Object o = bucket.toSingle();
+        assertEquals("test", o);
+    }
+
+    @Test
+    void containsAll() {
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        List<String> strings = Arrays.asList("test0", "test1");
+        bucket.elements.addAll(strings);
+
+        assertTrue(bucket.containsAll((Object) strings.toArray(new String[0])));
+    }
+
+    @Test
+    void contains() {
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.elements.add("test");
+
+        assertTrue(bucket.contains("test"));
+    }
+
+    @Test
+    void addAll() {
+        String testValue0 = "test0";
+        String testValue1 = "test1";
+
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        bucket.addAll(testValue0, testValue1);
+
+        Set<Object> elements = bucket.elements;
+        assertEquals(2, elements.size());
+        assertTrue(elements.contains("test0"));
+        assertTrue(elements.contains("test1"));
     }
 }
