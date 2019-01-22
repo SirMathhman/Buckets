@@ -15,6 +15,7 @@ public class Bucket<T, H extends BucketHandler<T>> {
     final Predicate<T> predicate;
     final H handler;
 
+    @SuppressWarnings("WeakerAccess")
     public Bucket(Predicate<T> predicate, H handler) {
         this.predicate = predicate;
         this.handler = handler;
@@ -58,7 +59,8 @@ public class Bucket<T, H extends BucketHandler<T>> {
         handler.accept(object);
     }
 
-    public void handleAll(T... objects){
+    @SafeVarargs
+    public final void handleAll(T... objects){
         for (T object : objects) {
             handle(object);
         }

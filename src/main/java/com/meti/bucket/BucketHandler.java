@@ -7,5 +7,6 @@ import java.util.function.Consumer;
  * @version 0.0.0
  * @since 1/22/2019
  */
+@SuppressWarnings("WeakerAccess")
 public interface BucketHandler<T> extends Consumer<T> {
 }
