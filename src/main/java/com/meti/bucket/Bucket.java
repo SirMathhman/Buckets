@@ -1,6 +1,6 @@
 package com.meti.bucket;
 
-import com.meti.Parameterized;
+import com.meti.predicate.Parameterized;
 import com.meti.util.CollectionUtil;
 
 import java.util.Collections;
@@ -63,14 +63,14 @@ public class Bucket<T> {
         }
     }
 
+    public boolean canAccept(T object) {
+        return predicate.test(object);
+    }
+
     public void add(T object) {
         checkAccept(object);
 
         elements.add(object);
-    }
-
-    public boolean canAccept(T object) {
-        return predicate.test(object);
     }
 
     public int size() {

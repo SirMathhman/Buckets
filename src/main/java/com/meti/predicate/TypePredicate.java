@@ -1,7 +1,5 @@
 package com.meti.predicate;
 
-import com.meti.Parameterized;
-
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
