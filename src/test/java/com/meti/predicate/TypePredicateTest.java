@@ -1,36 +1,74 @@
 package com.meti.predicate;
 
+import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+/**
+ * @author SirMathhman
+ * @version 0.0.0
+ * @since 1/18/2019
+ */
 class TypePredicateTest {
-
     @Test
-    void useSubClassTrue() {
-        TypePredicate<List> predicate = new TypePredicate<>(List.class, true);
-        assertTrue(predicate.test(ArrayList.class));
+    void constructJustClass(){
+        TypePredicate<?> predicate = new TypePredicate<>(Object.class);
+        assertEquals(Object.class, predicate.clazz);
+        assertTrue(predicate.useSubClass);
     }
 
     @Test
-    void useSubClassFalse() {
-        TypePredicate<List> predicate = new TypePredicate<>(List.class, true);
-        assertFalse(predicate.test(HashSet.class));
+    void constructWithUseSubClass(){
+        TypePredicate<?> predicate = new TypePredicate<>(Object.class, true);
+        assertTrue(predicate.useSubClass);
     }
 
     @Test
-    void withoutSubClassTrue(){
-        TypePredicate<String> predicate = new TypePredicate<>(String.class, false);
-        assertTrue(predicate.test(String.class));
+    void appliesNotEqual(){
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class, false);
+        assertFalse(predicate.test(0));
     }
 
     @Test
-    void withoutSubClassFalse(){
-        TypePredicate<List> predicate = new TypePredicate<>(List.class, false);
-        assertFalse(predicate.test(ArrayList.class));
+    void appliesNotApplicable() {
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
+        assertFalse(predicate.test("test"));
+    }
+
+    @Test
+    void appliesApplicable() {
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
+        assertTrue(predicate.test(new TestNumber()));
+    }
+
+    @Test
+    void appliesSubclass() {
+        TypePredicate<Number> predicate = new TypePredicate<>(Number.class);
+        assertTrue(predicate.test(0));
+    }
+
+    private static class TestNumber extends Number {
+        @Override
+        public int intValue() {
+            return 0;
+        }
+
+        @Override
+        public long longValue() {
+            return 0;
+        }
+
+        @Override
+        public float floatValue() {
+            return 0;
+        }
+
+        @Override
+        public double doubleValue() {
+            return 0;
+        }
     }
 }
