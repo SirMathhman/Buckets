@@ -1,12 +1,10 @@
 package com.meti.bucket;
 
+import com.meti.predicate.Parameterized;
 import com.meti.predicate.TypePredicate;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,7 +112,11 @@ class BucketTest {
     @Test
     void getElements() {
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        bucket.add("test0");
+        bucket.elements.add("test0");
+
+        Set<Object> elements = bucket.getElements();
+        assertEquals(1, elements.size());
+        assertTrue(elements.contains("test0"));
     }
 
     @Test
@@ -127,20 +129,21 @@ class BucketTest {
     }
 
     @Test
-    void containsAll() {
-        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        List<String> strings = Arrays.asList("test0", "test1");
-        bucket.elements.addAll(strings);
-
-        assertTrue(bucket.containsAll((Object) strings.toArray(new String[0])));
+    void containsAllParametersTrue() {
+        Bucket<Object> bucket = new Bucket<>(new TestPredicate());
+        assertTrue(bucket.containsAllParameters(String.class, Integer.class));
     }
 
     @Test
-    void contains() {
-        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        bucket.elements.add("test");
+    void containsAllParametersFalse() {
+        Bucket<Object> bucket = new Bucket<>(new TestPredicate());
+        assertFalse(bucket.containsAllParameters(String.class, Void.class));
+    }
 
-        assertTrue(bucket.contains("test"));
+    @Test
+    void containsParameter() {
+        Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
+        assertTrue(bucket.containsParameter(String.class));
     }
 
     @Test
@@ -155,5 +158,17 @@ class BucketTest {
         assertEquals(2, elements.size());
         assertTrue(elements.contains("test0"));
         assertTrue(elements.contains("test1"));
+    }
+
+    private class TestPredicate implements Parameterized<Object>, Predicate<Object> {
+        @Override
+        public boolean test(Object o) {
+            return false;
+        }
+
+        @Override
+        public Set<Object> getParameters() {
+            return new HashSet<>(Arrays.asList(String.class, Integer.class));
+        }
     }
 }

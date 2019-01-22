@@ -4,13 +4,12 @@ import com.meti.predicate.TypePredicate;
 import com.meti.util.CollectionUtil;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author SirMathhman
@@ -24,9 +23,9 @@ class BucketManagerTest {
         BucketManager<Object> bucketManager = new BucketManager<>(allocationFunction);
         assertEquals(allocationFunction, bucketManager.allocationFunction);
     }
-    
+
     @Test
-    void addNoPrevious(){
+    void addNoPrevious() {
         String testItem = "test0";
 
         BucketManager<Object> bucketManager = new BucketManager<>(o -> new Bucket<>(new TypePredicate<>(o.getClass())));
@@ -34,7 +33,7 @@ class BucketManagerTest {
 
         Set<Bucket<Object>> buckets = bucketManager.buckets;
         assertEquals(1, buckets.size());
-        
+
         Bucket<Object> bucket = CollectionUtil.toSingle(buckets);
         Predicate<Object> predicate = bucket.predicate;
 
@@ -47,7 +46,7 @@ class BucketManagerTest {
     }
 
     @Test
-    void addWithPrevious(){
+    void addWithPrevious() {
         String testItem = "test0";
 
         BucketManager<Object> bucketManager = new BucketManager<>(o -> new Bucket<>(new TypePredicate<>(o.getClass())));
@@ -66,5 +65,38 @@ class BucketManagerTest {
         Set<Object> elements = bucket.elements;
         assertEquals(2, elements.size());
         assertTrue(elements.contains(testItem));
+    }
+
+    @Test
+    void byParameters() {
+        BucketManager<Object> bucketManager = new BucketManager<>(o -> new Bucket<>(new TypePredicate<>(o.getClass())));
+        bucketManager.add(10);
+        bucketManager.add("test0");
+        bucketManager.add(new ArrayList<>());
+
+        Set<Bucket<Object>> buckets = bucketManager.byParameters(String.class);
+        assertEquals(1, buckets.size());
+
+        Bucket<Object> bucket = CollectionUtil.toSingle(buckets);
+        assertEquals("test0", bucket.toSingle());
+    }
+
+    @Test
+    void byParametersEmpty() {
+        BucketManager<Object> bucketManager = new BucketManager<>(o -> new Bucket<>(o1 -> false));
+        bucketManager.buckets.add(new Bucket<>(o1 -> false));
+        Set<Bucket<Object>> test = bucketManager.byParameters("test");
+        assertTrue(test.isEmpty());
+    }
+
+    @Test
+    void byParametersToSingle() {
+        BucketManager<Object> bucketManager = new BucketManager<>(o -> new Bucket<>(new TypePredicate<>(o.getClass())));
+        bucketManager.add(10);
+        bucketManager.add("test0");
+        bucketManager.add(new ArrayList<>());
+
+        Object token = bucketManager.byParametersToSingle(String.class).toSingle();
+        assertEquals("test0", token);
     }
 }

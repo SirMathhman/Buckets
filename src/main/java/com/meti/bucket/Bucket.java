@@ -29,16 +29,16 @@ public class Bucket<T> {
         return CollectionUtil.toSingle(elements);
     }
 
-    public boolean containsAll(Object... parameters) {
+    public boolean containsAllParameters(Object... parameters) {
         for (Object parameter : parameters) {
-            if (!contains(parameter)) {
+            if (!containsParameter(parameter)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean contains(Object parameter) {
+    public boolean containsParameter(Object parameter) {
         Parameterized parameterized = checkParameterized();
         return parameterized.getParameters().contains(parameter);
     }

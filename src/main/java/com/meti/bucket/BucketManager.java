@@ -1,5 +1,9 @@
 package com.meti.bucket;
 
+import com.meti.util.CollectionUtil;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -22,12 +26,16 @@ public class BucketManager<T> {
         return buckets.stream()
                 .filter(tBucket -> {
                     try {
-                        return tBucket.containsAll(parameters);
+                        return tBucket.containsAllParameters(parameters);
                     } catch (ClassCastException e) {
                         return false;
                     }
                 })
                 .collect(Collectors.toSet());
+    }
+
+    public Bucket<T> byParametersToSingle(Object... parameters){
+        return CollectionUtil.toSingle(byParameters(parameters));
     }
 
     public void add(T test) {
