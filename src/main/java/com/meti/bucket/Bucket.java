@@ -1,11 +1,7 @@
 package com.meti.bucket;
 
 import com.meti.predicate.Parameterized;
-import com.meti.util.CollectionUtil;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -15,18 +11,15 @@ import java.util.function.Predicate;
  */
 public class Bucket<T> {
     final Predicate<T> predicate;
-    final Set<T> elements = new HashSet<>();
+    final BucketHandler<T> handler;
 
     public Bucket(Predicate<T> predicate) {
+        this(predicate, CollectionHandler.empty());
+    }
+
+    public Bucket(Predicate<T> predicate, BucketHandler<T> handler) {
         this.predicate = predicate;
-    }
-
-    public Set<T> getElements() {
-        return Collections.unmodifiableSet(elements);
-    }
-
-    public T toSingle() {
-        return CollectionUtil.toSingle(elements);
+        this.handler = handler;
     }
 
     public boolean containsAllParameters(Object... parameters) {
@@ -47,16 +40,6 @@ public class Bucket<T> {
         return ((Parameterized) predicate);
     }
 
-    public void clear() {
-        elements.clear();
-    }
-
-    public boolean remove(T object) {
-        checkAccept(object);
-
-        return elements.remove(object);
-    }
-
     public void checkAccept(T object) {
         if (!canAccept(object)) {
             throw new IllegalArgumentException("Cannot accept " + object);
@@ -67,19 +50,15 @@ public class Bucket<T> {
         return predicate.test(object);
     }
 
-    public void add(T object) {
+    public void handle(T object) {
         checkAccept(object);
 
-        elements.add(object);
+        handler.handle(object);
     }
 
-    public void addAll(T... objects){
+    public void handleAll(T... objects){
         for (T object : objects) {
-            add(object);
+            handle(object);
         }
-    }
-
-    public int size() {
-        return elements.size();
     }
 }

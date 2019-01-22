@@ -2,8 +2,6 @@ package com.meti.bucket;
 
 import com.meti.util.CollectionUtil;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -45,11 +43,11 @@ public class BucketManager<T> {
 
         if(validBuckets.size() == 0 ){
             Bucket<T> allocatedBucket = allocationFunction.apply(test);
-            allocatedBucket.add(test);
+            allocatedBucket.handle(test);
             buckets.add(allocatedBucket);
         }
         else{
-            validBuckets.forEach(bucket -> bucket.add(test));
+            validBuckets.forEach(bucket -> bucket.handle(test));
         }
     }
 }

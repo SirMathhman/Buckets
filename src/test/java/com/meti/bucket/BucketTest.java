@@ -71,7 +71,7 @@ class BucketTest {
         String testValue = "test";
 
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        bucket.add(testValue);
+        bucket.handle(testValue);
         assertTrue(bucket.elements.contains(testValue));
     }
 
@@ -80,7 +80,7 @@ class BucketTest {
         List<?> testValue = new ArrayList<>();
 
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        assertThrows(IllegalArgumentException.class, () -> bucket.add(testValue));
+        assertThrows(IllegalArgumentException.class, () -> bucket.handle(testValue));
 
         assertFalse(bucket.elements.contains(testValue));
     }
@@ -152,7 +152,7 @@ class BucketTest {
         String testValue1 = "test1";
 
         Bucket<Object> bucket = new Bucket<>(new TypePredicate<>(String.class));
-        bucket.addAll(testValue0, testValue1);
+        bucket.handleAll(testValue0, testValue1);
 
         Set<Object> elements = bucket.elements;
         assertEquals(2, elements.size());
