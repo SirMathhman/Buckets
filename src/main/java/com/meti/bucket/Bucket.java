@@ -2,6 +2,8 @@ package com.meti.bucket;
 
 import com.meti.predicate.Parameterized;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 /**
@@ -9,17 +11,17 @@ import java.util.function.Predicate;
  * @version 0.0.0
  * @since 1/18/2019
  */
-public class Bucket<T> {
+public class Bucket<T, H extends BucketHandler<T>> {
     final Predicate<T> predicate;
-    final BucketHandler<T> handler;
+    final H handler;
 
-    public Bucket(Predicate<T> predicate) {
-        this(predicate, CollectionHandler.empty());
-    }
-
-    public Bucket(Predicate<T> predicate, BucketHandler<T> handler) {
+    public Bucket(Predicate<T> predicate, H handler) {
         this.predicate = predicate;
         this.handler = handler;
+    }
+
+    public static <T> Bucket<T, CollectionHandler<T, Set<T>>> createBucket(Predicate<T> predicate) {
+        return new Bucket<>(predicate, new CollectionHandler<>(new HashSet<>()));
     }
 
     public boolean containsAllParameters(Object... parameters) {
