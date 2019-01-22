@@ -55,7 +55,7 @@ public class Bucket<T, H extends BucketHandler<T>> {
     public void handle(T object) {
         checkAccept(object);
 
-        handler.handle(object);
+        handler.accept(object);
     }
 
     public void handleAll(T... objects){
