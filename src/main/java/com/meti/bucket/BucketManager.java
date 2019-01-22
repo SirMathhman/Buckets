@@ -2,8 +2,6 @@ package com.meti.bucket;
 
 import com.meti.util.CollectionUtil;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -14,15 +12,19 @@ import java.util.stream.Collectors;
  * @version 0.0.0
  * @since 1/18/2019
  */
-public class BucketManager<T> {
-    final Function<T, Bucket<T>> allocationFunction;
-    final Set<Bucket<T>> buckets = new HashSet<>();
+public class BucketManager<T, H extends BucketHandler<T>> {
+    final Function<T, Bucket<T, H>> allocationFunction;
+    final Set<Bucket<T, H>> buckets = new HashSet<>();
 
-    public BucketManager(Function<T, Bucket<T>> allocationFunction) {
+    public BucketManager(Function<T, Bucket<T, H>> allocationFunction) {
         this.allocationFunction = allocationFunction;
     }
 
-    public Set<Bucket<T>> byParameters(Object... parameters) {
+    public Bucket<T, H> byParametersToSingle(Object... parameters) {
+        return CollectionUtil.toSingle(byParameters(parameters));
+    }
+
+    public Set<Bucket<T, H>> byParameters(Object... parameters) {
         return buckets.stream()
                 .filter(tBucket -> {
                     try {
@@ -34,22 +36,18 @@ public class BucketManager<T> {
                 .collect(Collectors.toSet());
     }
 
-    public Bucket<T> byParametersToSingle(Object... parameters){
-        return CollectionUtil.toSingle(byParameters(parameters));
-    }
-
     public void add(T test) {
-        Set<Bucket<T>> validBuckets = buckets.stream()
+        Set<Bucket<T, H>> validBuckets = buckets.stream()
                 .filter(bucket -> bucket.canAccept(test))
                 .collect(Collectors.toSet());
 
         if(validBuckets.size() == 0 ){
-            Bucket<T> allocatedBucket = allocationFunction.apply(test);
-            allocatedBucket.add(test);
+            Bucket<T, H> allocatedBucket = allocationFunction.apply(test);
+            allocatedBucket.handle(test);
             buckets.add(allocatedBucket);
         }
         else{
-            validBuckets.forEach(bucket -> bucket.add(test));
+            validBuckets.forEach(bucket -> bucket.handle(test));
         }
     }
 }
