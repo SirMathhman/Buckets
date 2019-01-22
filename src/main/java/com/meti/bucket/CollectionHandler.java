@@ -18,7 +18,7 @@ public class CollectionHandler<T, C extends Collection<T>> implements BucketHand
     }
 
     @Override
-    public void handle(T object) {
+    public void accept(T object) {
         collection.add(object);
     }
 
