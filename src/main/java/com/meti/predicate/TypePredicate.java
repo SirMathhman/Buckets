@@ -1,25 +1,38 @@
 package com.meti.predicate;
 
+import java.util.Collections;
+import java.util.Set;
+import java.util.function.Predicate;
+
 /**
  * @author SirMathhman
  * @version 0.0.0
- * @since 1/8/2019
+ * @since 1/18/2019
  */
-public class TypePredicate<T> extends ParameterizedPredicate<Class<T>, Class<?>> {
-    private final boolean subClass;
+public class TypePredicate<T> implements Parameterized<Class<T>>, Predicate<Object> {
+    final boolean useSubClass;
+    final Class<T> clazz;
 
-    public TypePredicate(Class<T> testClass, boolean useSubClass) {
-        super(testClass);
-        this.subClass = useSubClass;
+    public TypePredicate(Class<T> clazz) {
+        this(clazz, true);
+    }
+
+    public TypePredicate(Class<T> clazz, boolean useSubClass) {
+        this.clazz = clazz;
+        this.useSubClass = useSubClass;
     }
 
     @Override
-    public boolean test(Class<?> aClass) {
-        if (subClass) {
-            return parameters.get(0).isAssignableFrom(aClass);
+    public boolean test(Object o) {
+        if (useSubClass) {
+            return clazz.isAssignableFrom(o.getClass());
+        } else {
+            return clazz.equals(o.getClass());
         }
-        else{
-            return parameters.get(0).equals(aClass);
-        }
+    }
+
+    @Override
+    public Set<Class<T>> getParameters() {
+        return Collections.singleton(clazz);
     }
 }

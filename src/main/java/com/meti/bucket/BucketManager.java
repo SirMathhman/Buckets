@@ -1,105 +1,55 @@
 package com.meti.bucket;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.meti.util.CollectionUtil;
+
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
- * @since 1/8/2019
+ * @since 1/18/2019
  */
-class BucketManager<T, B extends Bucket<T, ?>> {
-    private final Function<T, B> bucketAllocator;
-    private final Set<B> buckets;
+@SuppressWarnings("WeakerAccess")
+public class BucketManager<T, H extends Consumer<T>> {
+    final Function<T, Bucket<T, H>> allocationFunction;
+    final Set<Bucket<T, H>> buckets = new HashSet<>();
 
-    public BucketManager() {
-        this(Stream.empty());
+    public BucketManager(Function<T, Bucket<T, H>> allocationFunction) {
+        this.allocationFunction = allocationFunction;
     }
 
-    public BucketManager(Stream<B> bucketStream) {
-        this(null, bucketStream);
+    public Bucket<T, H> byParametersToSingle(Object... parameters) {
+        return CollectionUtil.toSingle(byParameters(parameters));
     }
 
-    private BucketManager(Function<T, B> bucketAllocator, Stream<B> bucketStream) {
-        this.bucketAllocator = bucketAllocator;
-        this.buckets = bucketStream.collect(Collectors.toSet());
-    }
-
-    public BucketManager(Function<T, B> bucketAllocator) {
-        this(bucketAllocator, Stream.empty());
-    }
-
-    public Map<B, Stream<T>> compoundStream() {
-        Map<B, Stream<T>> map = new HashMap<>();
-        buckets.forEach(bucket -> map.put(bucket, bucket.getCollection().stream()));
-        return map;
-    }
-
-    public int bucketCount() {
-        return buckets.size();
-    }
-
-    public int elementCount() {
+    public Set<Bucket<T, H>> byParameters(Object... parameters) {
         return buckets.stream()
-                .mapToInt(bucket -> bucket.getCollection().size())
-                .sum();
-    }
-
-    public Stream<T> elementStream() {
-        return buckets.stream().flatMap((Function<B, Stream<T>>) b -> b.getCollection().stream());
-    }
-
-    public void clear() {
-        buckets.clear();
-    }
-
-    public Map<T, Set<B>> removeAll(Stream<T> elementStream) {
-        Map<T, Set<B>> filledBucketMap = new HashMap<>();
-        elementStream.forEach(element -> {
-            Set<B> filledBuckets = remove(element);
-            if (filledBuckets.size() != 0) {
-                filledBucketMap.put(element, filledBuckets);
-            }
-        });
-        return filledBucketMap;
-    }
-
-    public Set<B> remove(T element) {
-        return buckets.stream()
-                .filter(bucket -> bucket.getCollection().contains(element))
-                .peek(bucket -> bucket.getCollection().remove(element))
+                .filter(tBucket -> {
+                    try {
+                        return tBucket.containsAllParameters(parameters);
+                    } catch (ClassCastException e) {
+                        return false;
+                    }
+                })
                 .collect(Collectors.toSet());
     }
 
-    public Map<T, Set<B>> addAll(Stream<T> elementStream) {
-        Map<T, Set<B>> filledBucketMap = new HashMap<>();
-        elementStream.forEach(element -> {
-            Set<B> filledBuckets = add(element);
-            if (filledBuckets.size() != 0) {
-                filledBucketMap.put(element, filledBuckets);
-            }
-        });
-        return filledBucketMap;
-    }
-
-    public Set<B> add(T element) {
-        Set<B> filledBuckets = buckets.stream()
-                .filter(tcBucket -> tcBucket.canUse(element))
-                .peek(tcBucket -> tcBucket.getCollection().add(element))
+    public void add(T test) {
+        Set<Bucket<T, H>> validBuckets = buckets.stream()
+                .filter(bucket -> bucket.canAccept(test))
                 .collect(Collectors.toSet());
-        if (filledBuckets.isEmpty() && bucketAllocator != null) {
-            buckets.add(bucketAllocator.apply(element));
-            return add(element);
-        } else {
-            return filledBuckets;
+
+        if(validBuckets.size() == 0 ){
+            Bucket<T, H> allocatedBucket = allocationFunction.apply(test);
+            allocatedBucket.handle(test);
+            buckets.add(allocatedBucket);
         }
-    }
-
-    public Set<B> buckets() {
-        return buckets;
+        else{
+            validBuckets.forEach(bucket -> bucket.handle(test));
+        }
     }
 }
