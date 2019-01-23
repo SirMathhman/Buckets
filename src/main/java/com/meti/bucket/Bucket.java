@@ -4,6 +4,7 @@ import com.meti.predicate.Parameterized;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -11,7 +12,7 @@ import java.util.function.Predicate;
  * @version 0.0.0
  * @since 1/18/2019
  */
-public class Bucket<T, H extends BucketHandler<T>> {
+public class Bucket<T, H extends Consumer<T>> {
     final Predicate<T> predicate;
     final H handler;
 

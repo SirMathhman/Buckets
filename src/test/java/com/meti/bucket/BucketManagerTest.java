@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -40,7 +41,7 @@ class BucketManagerTest {
         assertTrue(predicate.test("test1"));
         assertFalse(predicate.test(Integer.class));
 
-        BucketHandler<Object> handler = bucket.handler;
+        Consumer<Object> handler = bucket.handler;
         assertTrue(CollectionHandler.class.isAssignableFrom(handler.getClass()));
         Set<Object> elements = ((CollectionHandler<Object, Set<Object>>) handler).getElements();
         assertEquals(1, elements.size());

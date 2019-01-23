@@ -4,6 +4,7 @@ import com.meti.util.CollectionUtil;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  * @since 1/18/2019
  */
 @SuppressWarnings("WeakerAccess")
-public class BucketManager<T, H extends BucketHandler<T>> {
+public class BucketManager<T, H extends Consumer<T>> {
     final Function<T, Bucket<T, H>> allocationFunction;
     final Set<Bucket<T, H>> buckets = new HashSet<>();
 

@@ -4,13 +4,14 @@ import com.meti.util.CollectionUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * @author SirMathhman
  * @version 0.0.0
  * @since 1/22/2019
  */
-public class CollectionHandler<T, C extends Collection<T>> implements BucketHandler<T> {
+public class CollectionHandler<T, C extends Collection<T>> implements Consumer<T> {
     private final C collection;
 
     public CollectionHandler(C collection) {
